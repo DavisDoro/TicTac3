@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TicTac3
 {
-    class GameField // laukums
+    class GameField // game field and field manipulations
     {
         public static string[] fieldValue = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
         public void Print()
@@ -18,7 +18,7 @@ namespace TicTac3
             Console.WriteLine("      {0} | {1} | {2} ", fieldValue[6], fieldValue[7], fieldValue[8]);
             Console.WriteLine("     ¯¯¯¯¯¯¯¯¯¯¯");
         }
-        public void Reset()
+        public void Reset() // reset field values
         {
             int setTo = 0;
             for (int i = 0; i < fieldValue.Length; i++)

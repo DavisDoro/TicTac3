@@ -10,21 +10,57 @@ namespace TicTac3
         static string inputString;
         static void Main(string[] args)
         {
-            //string inputString;
-            //GameField tictac = new GameField();
-            //myGame move = new myGame();
-            //Play();
+            GameField tictac = new GameField();
+            myGame move = new myGame();
 
-
-            do
+            do                          // main game loop
             {
                 Play();
 
-            } while (!Winner.WeHaveWinner());
+            } while (!move.IsWinner());         // if winner decided game stops
+            
+        }
+        static void Play()                      // main game method
+        {
+            GameField tictac = new GameField();
+            myGame move = new myGame();
+            Console.Clear();
+            tictac.Print();
+            symbol = move.NextMoveBy();    // asigns next move Symbol
+
+            if (move.IsGameOver())          //checks if game is over as draw
+            {
+                inputString = "reset";     //allowes smooth transition to next round
+                NewGame(move, tictac);     //asks and resets game
+            }
+            else
+            {
+                Console.Write($"What is your next move {move.Player}: ");  // prints player number 
+                inputString = Console.ReadLine();
+            }
+
+            if (inputString.Equals("reset"))             // This allowes program to skip Validate() method and start new round
+            {
+                Console.WriteLine("This wont be displayed anyway");
+            }
+            else if (Validate(inputString))
+            {
+                move.MakeMove(input, symbol);
+            }
+            else
+            {
+                Console.WriteLine("Incorrect input");
+            }
+
+            if (move.IsWinner())  // if there is a winner print congratulation message
+            {
+                Console.Clear();
+                tictac.Print();
+                Congratulate(move, tictac);
+            }
 
         }
-
-            static bool Validate(string inputStr) // Pārbauda vai izvēlētais lauciņš jau nav aizņemts
+        static bool Validate(string inputStr)       // Input check is it between 1 and 9
              {
             if (int.TryParse(inputStr, out input) && (input >= 1 && input <= 9))
             {
@@ -37,6 +73,7 @@ namespace TicTac3
                 return false;
             }
         }
+
         static void NewGame(myGame move, GameField tictac)
         {
             Console.WriteLine("GAME OVER");
@@ -44,41 +81,32 @@ namespace TicTac3
             string newGame = Console.ReadLine();
             if (newGame.Equals("y"))
             {
-
                 tictac.Reset();
                 Console.Clear();
-                tictac.Print();
-                //symbol = move.NextMoveBy();
             }
             else
             {
                 Environment.Exit(0);
             }
         }
-        static void Play()
+        
+        static void Congratulate(myGame move, GameField tictac)
         {
-            GameField tictac = new GameField();
-            myGame move = new myGame();
-            Console.Clear();
-            tictac.Print();
-            symbol = move.NextMoveBy();
-            if (move.IsGameOver())
+
+            Console.WriteLine($"\r\nCongratulations {move.Player}, you WON!");
+
+            Console.Write("Start new game? y/n ");
+            string newGame = Console.ReadLine();
+            if (newGame.Equals("y"))
             {
-                NewGame(move, tictac);
+                tictac.Reset();
+                Console.Clear();
             }
             else
             {
-                Console.Write($"What is your next move {move.Player}: ");
-                inputString = Console.ReadLine();
+                Environment.Exit(0);
             }
-            if (Validate(inputString))
-            {
-                move.MakeMove(input, symbol);
-            }
-            else
-            {
-                Console.WriteLine("Incorrect input");
-            }
+
         }
 
 
