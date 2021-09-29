@@ -13,11 +13,11 @@ namespace TicTac3
         public string Player { get; set; }
         public int XinField { get; set; }
         public int OinField { get; set; }
-
-        public void MakeMove(int Coordinate, string Symbol)
+        GameField tictoc = new GameField();
+        public void MakeMove(int Coordinate, GameField tictac)
         {
 
-            if (GameField.fieldValue[Coordinate - 1] == "X" || GameField.fieldValue[Coordinate - 1] == "O")
+            if (tictac.fieldValue[Coordinate - 1] == "X" || tictac.fieldValue[Coordinate - 1] == "O")
             {
                 Console.WriteLine("Location {0} is already taken", Coordinate);
                 Console.Write("Press Any Key to try again");
@@ -25,40 +25,27 @@ namespace TicTac3
             }
             else
             {
-                GameField.fieldValue[Coordinate - 1] = Symbol;
+                tictac.fieldValue[Coordinate - 1] = Symbol;
             }
 
         }
-
-        public string NextMoveBy() // check who goes next - P1 or P2.
+        public void ChangePlayer()
         {
-
-            foreach (string item in GameField.fieldValue)
+            if (Player == "1")
             {
-                if (item == "X")
-                {
-
-                    this.XinField++;
-                }
-                else if (item == "O")
-                {
-
-                    this.OinField++;
-                }
-            }
-            if (XinField <= OinField)
-            {
-                this.Player = "Player1";
-                return "X";
+                Player = "2";
+                Symbol = "O";
             }
             else
             {
-                this.Player = "Player2";
-                return "O";
+                Player = "1";
+                Symbol = "X";
             }
         }
         public bool IsGameOver() // check if all fields are full
         {
+
+
             if ((XinField + OinField) == 9)
             {
                 return true;
@@ -69,43 +56,65 @@ namespace TicTac3
             }
 
         }
-        public bool IsWinner()  // ugly if wall for winner check
+        public bool IsWinner(GameField tictac)  // ugly if wall for winner check
         {
-            if (GameField.fieldValue[0] == GameField.fieldValue[1] && GameField.fieldValue[1] == GameField.fieldValue[2]) // first row
+            if (tictac.fieldValue[0] == tictac.fieldValue[1] && tictac.fieldValue[1] == tictac.fieldValue[2]) // first row
             {
                 return true;
             }
-            else if (GameField.fieldValue[3] == GameField.fieldValue[4] && GameField.fieldValue[4] == GameField.fieldValue[5]) //second row
+            else if (tictac.fieldValue[3] == tictac.fieldValue[4] && tictac.fieldValue[4] == tictac.fieldValue[5]) //second row
             {
                 return true;
             }
-            else if (GameField.fieldValue[6] == GameField.fieldValue[7] && GameField.fieldValue[7] == GameField.fieldValue[8]) // third row
+            else if (tictac.fieldValue[6] == tictac.fieldValue[7] && tictac.fieldValue[7] == tictac.fieldValue[8]) // third row
             {
                 return true;
             }
-            else if (GameField.fieldValue[0] == GameField.fieldValue[3] && GameField.fieldValue[3] == GameField.fieldValue[6]) // first column
+            else if (tictac.fieldValue[0] == tictac.fieldValue[3] && tictac.fieldValue[3] == tictac.fieldValue[6]) // first column
             {
                 return true;
             }
-            else if (GameField.fieldValue[1] == GameField.fieldValue[4] && GameField.fieldValue[4] == GameField.fieldValue[7]) // second column
+            else if (tictac.fieldValue[1] == tictac.fieldValue[4] && tictac.fieldValue[4] == tictac.fieldValue[7]) // second column
             {
                 return true;
             }
-            else if (GameField.fieldValue[2] == GameField.fieldValue[5] && GameField.fieldValue[5] == GameField.fieldValue[8]) // third column
+            else if (tictac.fieldValue[2] == tictac.fieldValue[5] && tictac.fieldValue[5] == tictac.fieldValue[8]) // third column
             {
                 return true;
             }
-            else if (GameField.fieldValue[0] == GameField.fieldValue[4] && GameField.fieldValue[4] == GameField.fieldValue[8])// diagonal one
+            else if (tictac.fieldValue[0] == tictac.fieldValue[4] && tictac.fieldValue[4] == tictac.fieldValue[8])// diagonal one
             {
                 return true;
             }
-            else if (GameField.fieldValue[2] == GameField.fieldValue[4] && GameField.fieldValue[4] == GameField.fieldValue[6]) // diagonal two
+            else if (tictac.fieldValue[2] == tictac.fieldValue[4] && tictac.fieldValue[4] == tictac.fieldValue[6]) // diagonal two
             {
                 return true;
             }
             return false;
+        }
+        public void Reset(GameField tictac) // reset field values
+        {
+            int setTo = 0;
+            for (int i = 0; i < tictac.fieldValue.Length; i++)
+            {
+                setTo++;
+                tictoc.fieldValue[i] = setTo.ToString();
+            }
+        }
+        static void NewGame(string input)
+        {
+            GameField tictac = new GameField();
+            if (input.Equals("y"))
+            {
+                tictac.Reset();
 
-
+                Console.Clear();
+                // and print field
+            }
+            else
+            {
+                Environment.Exit(0);
+            }
         }
 
     }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TicTac3
 {
-    class GameField // game field and field manipulations
+    public class GameField // game field and field manipulations
     {
-        public static string[] fieldValue = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+        public string[] fieldValue = new string[] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
         public void Print()
         {
             Console.WriteLine("      {0} | {1} | {2} ", fieldValue[0], fieldValue[1], fieldValue[2]);
