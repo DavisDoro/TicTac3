@@ -6,34 +6,29 @@ namespace TicTac3
     {
         public static string[] fieldValue;
         static int input = 0;
-        static string symbol;
         static string inputString;
         static void Main(string[] args)
         {
-            myGame move = new myGame();
-            move.Player = new System.Random().Next(1, 2).ToString(); // Random player 1 move
+            GameField tictac = new GameField();
+            myGame move = new myGame(tictac);
 
-            move.NewGame(tictac, "y"); //print first game screen
+            move.Player = new System.Random().Next(1, 3).ToString(); // Random player for first move
+            move.ChangePlayer(); // asigns player symbol after Random() generats who goes first
+            move.NewGame("y", tictac); //print first game screen
 
             do                          // main game loop
             {
-                Console.Clear();
-                
-
-                move.ChangePlayer(); // asigns player number and player symbol
-
-                if (move.IsGameOver())          //checks if game is over as draw
+                tictac.Print();
+                if (move.MoveCounter == 9)          //checks if game is over as draw
                 {
                     inputString = "reset";     //allowes smooth transition to next round
                     Console.Write("GAME OVER, start new game? y/n ");
                     string startNewGame = Console.ReadLine();
-                    NewGame(move, startNewGame);     //resets game
+                    move.NewGame(startNewGame, tictac);     //resets game
                 }
-                else
-                {
-                    Console.Write($"What is your next move Player{move.Player}: ");  // prints player number 
-                    inputString = Console.ReadLine();
-                }
+
+                Console.Write($"What is your next move Player{move.Player}({move.Symbol}): ");  // prints player number 
+                inputString = Console.ReadLine();
 
                 if (inputString.Equals("reset"))             // This allowes program to skip Validate() method and start new round
                 {
@@ -41,26 +36,26 @@ namespace TicTac3
                 }
                 else if (Validate(inputString))
                 {
-                    move.MakeMove(input);
+                    move.MakeMove(input, tictac);
                 }
                 else
                 {
                     Console.WriteLine("Incorrect input");
                 }
 
-                if (move.IsWinner())  // if there is a winner print congratulation message
+                if (move.IsWinner(tictac))  // if there is a winner print congratulation message
                 {
-                    Console.Clear();
                     tictac.Print();
-                    Congratulate(move);
+                    Congratulate(move, tictac);
                 }
+                move.ChangePlayer(); // asigns player number and player symbol
 
-            } while (!move.IsWinner());         // if winner decided game stops
-            
-        }
+            } while (!move.IsWinner(tictac));         // if winner decided game stops
+
+        }  // [MAIN ENDS]
 
         static bool Validate(string inputStr)       // Input check is it between 1 and 9
-             {
+        {
             if (int.TryParse(inputStr, out input) && (input >= 1 && input <= 9))
             {
                 return true;
@@ -73,26 +68,19 @@ namespace TicTac3
             }
         }
 
-
-        
-        static void Congratulate(myGame move)
+        static void Congratulate(myGame move, GameField tictac)
         {
-
             Console.WriteLine($"\r\nCongratulations Player{move.Player}, you WON!");
             Console.Write("Start new game? y/n ");
             string newGame = Console.ReadLine();
             if (newGame.Equals("y"))
             {
-                tictac.Reset();
-                Console.Clear();
+                move.NewGame("y", tictac);
             }
             else
             {
                 Environment.Exit(0);
             }
-
         }
-
-
     }
 }

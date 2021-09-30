@@ -1,33 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TicTac3
 {
+    
     public class myGame // game rules
     {
-        public string Symbol { get; set; }
-        public int Coordinate { get; set; }
-        public string Player { get; set; }
-        public int XinField { get; set; }
-        public int OinField { get; set; }
-        GameField tictoc = new GameField();
-        public void MakeMove(int Coordinate, GameField tictac)
+        public myGame(GameField tictac)
         {
+            this.Tictac = tictac;
+        }
+        public string Symbol { get; set; }
+        public string Player { get; set; }
+        public GameField Tictac { get; }
+        public int MoveCounter { get; set; }
 
+        public void MakeMove(int Coordinate, GameField tictac)   // Checks and performs next player move
+        {
             if (tictac.fieldValue[Coordinate - 1] == "X" || tictac.fieldValue[Coordinate - 1] == "O")
             {
                 Console.WriteLine("Location {0} is already taken", Coordinate);
                 Console.Write("Press Any Key to try again");
-                Console.ReadLine();
+                Console.ReadKey();
             }
             else
             {
                 tictac.fieldValue[Coordinate - 1] = Symbol;
+                MoveCounter++;  // counts total legit player moves
             }
-
         }
         public void ChangePlayer()
         {
@@ -41,20 +40,6 @@ namespace TicTac3
                 Player = "1";
                 Symbol = "X";
             }
-        }
-        public bool IsGameOver() // check if all fields are full
-        {
-
-
-            if ((XinField + OinField) == 9)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-
         }
         public bool IsWinner(GameField tictac)  // ugly if wall for winner check
         {
@@ -92,24 +77,14 @@ namespace TicTac3
             }
             return false;
         }
-        public void Reset(GameField tictac) // reset field values
+        public void NewGame(string input, GameField tictac) // asks player and resets game or quits
         {
-            int setTo = 0;
-            for (int i = 0; i < tictac.fieldValue.Length; i++)
-            {
-                setTo++;
-                tictoc.fieldValue[i] = setTo.ToString();
-            }
-        }
-        static void NewGame(string input)
-        {
-            GameField tictac = new GameField();
             if (input.Equals("y"))
             {
-                tictac.Reset();
-
+                MoveCounter = 0;
+                tictac.Reset();   
                 Console.Clear();
-                // and print field
+                tictac.Print();
             }
             else
             {
